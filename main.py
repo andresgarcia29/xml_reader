@@ -14,6 +14,13 @@ def remove_tags(item):
         item = item.replace(tag, '')
     return item
 
+def get_information_from_file(file, data):
+    with open(file, 'r') as xml:
+        text = xml.read()
+        results = re.findall('<text>[\s\S]*?<\/text>', text)
+        for result in results:
+            data.append(remove_tags(result))
+
 def main():
     print('Starting Program')
 
@@ -22,11 +29,7 @@ def main():
 
     data = list()
     for file in files:
-        with open(file, 'r') as xml:
-            text = xml.read()
-            results = re.findall('<text>[\s\S]*?<\/text>', text)
-            for result in results:
-                data.append(remove_tags(result))
+        get_information_from_file(file, data)
 
     for item in data:
         with open('results.csv', 'a') as file:
