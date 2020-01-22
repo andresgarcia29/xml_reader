@@ -8,6 +8,12 @@ SPACE = '\n'
 def get_files_from_directory(path):
     return [join(path, file) for file in listdir(path) if isfile(join(path, file))]
 
+def remove_tags(item):
+    tags = ['<text>', '</text>']
+    for tag in tags:
+        item = item.replace(tag, '')
+    return item
+
 def main():
     print('Starting Program')
 
@@ -18,9 +24,9 @@ def main():
     for file in files:
         with open(file, 'r') as xml:
             text = xml.read()
-            results = [] # Regex to find al the match
+            results = re.findall('<text>[\s\S]*?<\/text>', text)
             for result in results:
-                data.append(result)
+                data.append(remove_tags(result))
 
     for item in data:
         with open('results.csv', 'a') as file:
